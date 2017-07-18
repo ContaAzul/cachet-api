@@ -137,7 +137,7 @@ CachetAPI.prototype.reportIncident = function (incident) {
     });
 };
 
-CachetAPI.prototype.getComponentById = function (id, skipCache) {
+CachetAPI.prototype.getComponentById = function (id) {
     // Dirty hack
     var that = this;
 
@@ -153,11 +153,8 @@ CachetAPI.prototype.getComponentById = function (id, skipCache) {
             method: 'GET',
             json: true,
             headers: that.headers,
-            url: that.url + '/components/' + id
+            url: that.url + '/components/' + id + '?t=' + new Date().getTime()
         };
-        if (skipCache) {
-          req.url = req.url + '?t=' + new Date().getTime();
-        }
 
         // Execute request
         request(req, function (err, res, body) {
