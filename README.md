@@ -1,3 +1,18 @@
+# cachet-api fork
+
+## Why?
+
+The docker image provided by cachet has a nginx with cache set up
+in front of it. We want to get incidents in "realtime", so we don't
+want cached results.
+
+The PR adding this feature was not accepted by the author of the
+original lib (and that's ok), so we forked it.
+
+--------
+
+> Original readme:
+
 # cachet-api
 [![npm version](https://badge.fury.io/js/cachet-api.svg)](https://www.npmjs.com/package/cachet-api)
 
@@ -27,7 +42,7 @@ var cachet = new CachetAPI({
 });
 ```
 
-Make sure to fill in your Cachet status page `url` as well as your Cachet admin account's `apiKey`, which you can find in the [Cachet dashboard](https://docs.cachethq.io/docs/api-authentication#api-token). 
+Make sure to fill in your Cachet status page `url` as well as your Cachet admin account's `apiKey`, which you can find in the [Cachet dashboard](https://docs.cachethq.io/docs/api-authentication#api-token).
 
 ## Get Component Info
 
