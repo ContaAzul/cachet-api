@@ -39,12 +39,12 @@ function CachetAPI(options) {
     };
 }
 
-CachetAPI.prototype.publishMetricPoint = function (metricPoint) {
+CachetAPI.prototype.publishMetricPoint = function(metricPoint) {
     // Dirty hack
     var that = this;
 
     // Return a promise
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         // No metric point provided?
         if (!metricPoint) {
             return reject(new Error('Please provide the metric point to publish.'));
@@ -74,19 +74,19 @@ CachetAPI.prototype.publishMetricPoint = function (metricPoint) {
         };
 
         // Execute request
-        request(req, function (err, res, body) {
+        request(req, function(err, res, body) {
             // Handle the response accordingly
             handleResponse(err, res, body, reject, resolve);
         });
     });
 };
 
-CachetAPI.prototype.reportIncident = function (incident) {
+CachetAPI.prototype.reportIncident = function(incident) {
     // Dirty hack
     var that = this;
 
     // Return a promise
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         // No incident provided?
         if (!incident) {
             return reject(new Error('Please provide the incident to report.'));
@@ -115,8 +115,7 @@ CachetAPI.prototype.reportIncident = function (incident) {
                 // Attempt to convert component status name to code
                 incident.component_status = statusCodes.getComponentStatusCode(incident.component_status);
             }
-        }
-        catch (err) {
+        } catch (err) {
             // Bad status provided
             return reject(err);
         }
@@ -130,19 +129,19 @@ CachetAPI.prototype.reportIncident = function (incident) {
         };
 
         // Execute request
-        request(req, function (err, res, body) {
+        request(req, function(err, res, body) {
             // Handle the response accordingly
             handleResponse(err, res, body, reject, resolve);
         });
     });
 };
 
-CachetAPI.prototype.getComponentById = function (id) {
+CachetAPI.prototype.getComponentById = function(id) {
     // Dirty hack
     var that = this;
 
     // Return a promise
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         // No component ID provided?
         if (!id) {
             return reject(new Error('Please provide the component ID to fetch.'));
@@ -157,7 +156,7 @@ CachetAPI.prototype.getComponentById = function (id) {
         };
 
         // Execute request
-        request(req, function (err, res, body) {
+        request(req, function(err, res, body) {
             // Extract data object from body if it exists
             body = (body && body.data) ? body.data : body;
 
