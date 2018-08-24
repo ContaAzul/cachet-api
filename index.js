@@ -166,6 +166,82 @@ CachetAPI.prototype.getComponentById = function(id) {
     });
 };
 
+CachetAPI.prototype.updateIncident = function(id, message, status) {
+    // Dirty hack
+    var that = this;
+
+    // Return a promise
+    return new Promise(function(resolve, reject) {
+        // Prepare API request
+        var req = {
+            method: 'PUT',
+            json: true,
+            headers: that.headers,
+            body: { status: status, message: message },
+            url: that.url + '/incidents/' + id
+        };
+
+        // Execute request
+        request(req, function(err, res, body) {
+            // Handle the response accordingly
+            handleResponse(err, res, body, reject, resolve);
+        });
+    });
+};
+
+CachetAPI.prototype.updateComponent = function(id, status) {
+    // Dirty hack
+    var that = this;
+
+    // Return a promise
+    return new Promise(function(resolve, reject) {
+        // Prepare API request
+        var req = {
+            method: 'PUT',
+            json: true,
+            headers: that.headers,
+            body: { status: status },
+            url: that.url + '/components/' + id
+        };
+
+        // Execute request
+        request(req, function(err, res, body) {
+            // Handle the response accordingly
+            handleResponse(err, res, body, reject, resolve);
+        });
+    });
+};
+
+CachetAPI.prototype.getIncidentsByComponents = function(id, status) {
+    // Dirty hack
+    var that = this;
+
+    // Return a promise
+    return new Promise(function(resolve, reject) {
+        // No component ID provided?
+        if (!id) {
+            return reject(new Error('Please provide the component ID to fetch.'));
+        }
+
+        // Prepare API request
+        var req = {
+            method: 'GET',
+            json: true,
+            headers: that.headers,
+            url: that.url + '/incidents?component_id=' + id + '&status=' + status
+        };
+
+        // Execute request
+        request(req, function(err, res, body) {
+            // Extract data object from body if it exists
+            body = (body && body.data) ? body.data : body;
+
+            // Handle the response accordingly
+            handleResponse(err, res, body, reject, resolve);
+        });
+    });
+};
+
 function handleResponse(err, res, body, reject, resolve) {
     // Handle errors by rejecting the promise
     if (err) {
