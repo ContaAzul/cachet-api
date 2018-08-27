@@ -39,6 +39,13 @@ function CachetAPI(options) {
     };
 }
 
+function parseFilter(filter) {
+    return Object.keys(filter).map(function(param, idx) {
+        var queryParam = param + '=' + filter[param];
+        return idx === 0 ? '?' + queryParam : queryParam;
+    }).join('&');
+}
+
 CachetAPI.prototype.publishMetricPoint = function(metricPoint) {
     // Dirty hack
     var that = this;
@@ -166,20 +173,25 @@ CachetAPI.prototype.getComponentById = function(id) {
     });
 };
 
-CachetAPI.prototype.updateIncident = function(id, param) {
+CachetAPI.prototype.updateIncident = function(incident) {
     // Dirty hack
     var that = this;
 
     // Return a promise
     return new Promise(function(resolve, reject) {
-        // No param provided?
-        if (!param) {
-            return reject(new Error('Please provide the param to report.'));
+        // No incident provided?
+        if (!incident) {
+            return reject(new Error('Please provide the incident to report.'));
         }
 
-        // Param must be an object
-        if (typeof param !== 'object') {
-            return reject(new Error('Please provide the param as an object.'));
+        // Incident must be an object
+        if (typeof incident !== 'object') {
+            return reject(new Error('Please provide the incident as an object.'));
+        }
+
+        // Check for required parameters
+        if (!incident.id || !incident.status || !incident.message) {
+            return reject(new Error('Please provide the incident id, message and status.'));
         }
 
         // Prepare API request
@@ -187,8 +199,8 @@ CachetAPI.prototype.updateIncident = function(id, param) {
             method: 'PUT',
             json: true,
             headers: that.headers,
-            body: param,
-            url: that.url + '/incidents/' + id
+            body: incident,
+            url: that.url + '/incidents/' + incident.id
         };
 
         // Execute request
@@ -199,20 +211,25 @@ CachetAPI.prototype.updateIncident = function(id, param) {
     });
 };
 
-CachetAPI.prototype.updateComponent = function(id, param) {
+CachetAPI.prototype.updateComponent = function(component) {
     // Dirty hack
     var that = this;
 
     // Return a promise
     return new Promise(function(resolve, reject) {
-        // No param provided?
-        if (!param) {
-            return reject(new Error('Please provide the param to report.'));
+        // No component provided?
+        if (!component) {
+            return reject(new Error('Please provide the component to report.'));
         }
 
-        // Param must be an object
-        if (typeof param !== 'object') {
-            return reject(new Error('Please provide the param as an object.'));
+        // Component must be an object
+        if (typeof component !== 'object') {
+            return reject(new Error('Please provide the component as an object.'));
+        }
+
+        // Check for required parameters
+        if (!component.id || !component.status) {
+            return reject(new Error('Please provide the incident id and status.'));
         }
 
         // Prepare API request
@@ -220,8 +237,8 @@ CachetAPI.prototype.updateComponent = function(id, param) {
             method: 'PUT',
             json: true,
             headers: that.headers,
-            body: param,
-            url: that.url + '/components/' + id
+            body: component,
+            url: that.url + '/components/' + component.id
         };
 
         // Execute request
@@ -232,23 +249,18 @@ CachetAPI.prototype.updateComponent = function(id, param) {
     });
 };
 
-CachetAPI.prototype.getIncidentsByComponents = function(id, status) {
+CachetAPI.prototype.getIncidents = function(filter) {
     // Dirty hack
     var that = this;
 
     // Return a promise
     return new Promise(function(resolve, reject) {
-        // No component ID provided?
-        if (!id) {
-            return reject(new Error('Please provide the component ID to fetch.'));
-        }
-
         // Prepare API request
         var req = {
             method: 'GET',
             json: true,
             headers: that.headers,
-            url: that.url + '/incidents?component_id=' + id + '&status=' + status
+            url: that.url + '/incidents' + parseFilter(filter)
         };
 
         // Execute request
