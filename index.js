@@ -166,18 +166,28 @@ CachetAPI.prototype.getComponentById = function(id) {
     });
 };
 
-CachetAPI.prototype.updateIncident = function(id, message, status) {
+CachetAPI.prototype.updateIncident = function(id, param) {
     // Dirty hack
     var that = this;
 
     // Return a promise
     return new Promise(function(resolve, reject) {
+        // No param provided?
+        if (!param) {
+            return reject(new Error('Please provide the param to report.'));
+        }
+
+        // Param must be an object
+        if (typeof param !== 'object') {
+            return reject(new Error('Please provide the param as an object.'));
+        }
+
         // Prepare API request
         var req = {
             method: 'PUT',
             json: true,
             headers: that.headers,
-            body: { status: status, message: message },
+            body: param,
             url: that.url + '/incidents/' + id
         };
 
@@ -189,18 +199,28 @@ CachetAPI.prototype.updateIncident = function(id, message, status) {
     });
 };
 
-CachetAPI.prototype.updateComponent = function(id, status) {
+CachetAPI.prototype.updateComponent = function(id, param) {
     // Dirty hack
     var that = this;
 
     // Return a promise
     return new Promise(function(resolve, reject) {
+        // No param provided?
+        if (!param) {
+            return reject(new Error('Please provide the param to report.'));
+        }
+
+        // Param must be an object
+        if (typeof param !== 'object') {
+            return reject(new Error('Please provide the param as an object.'));
+        }
+
         // Prepare API request
         var req = {
             method: 'PUT',
             json: true,
             headers: that.headers,
-            body: { status: status },
+            body: param,
             url: that.url + '/components/' + id
         };
 
